@@ -3,6 +3,7 @@ import pandas as pd
 
 
 class ZombieHunter:
+    MARKETS = ['us', 'germany', 'canada', 'china']
     def __init__(self):
         key = 'p84KvYhpzCeiudDOdfK21aHA8IRx7sYC'
         sf.set_api_key(key)
@@ -13,14 +14,14 @@ class ZombieHunter:
     def find_zombies(market):
         df = sf.load_income(variant='annual', market=market)
         df = df[df['Interest Expense, Net'] > 0]
-        df['Zombie Indicator'] = df['Operating Income (Loss)'] / df['Interest Expense, Net']
-        df = df[df['Zombie Indicator'] < 1]
+        df['Interest Coveraga Ratio'] = df['Operating Income (Loss)'] / df['Interest Expense, Net']
+        df = df[df['Interest Coveraga Ratio'] < 1]
         return df
 
 
     @staticmethod
     def rank_zombies(df):
-        return df.sort_values(by='Zombie Indicator')
+        return df.sort_values(by='Interest Coveraga Ratio')
 
 
     def hunt_zombies(self, market):
@@ -33,3 +34,5 @@ class ZombieHunter:
 if __name__ == '__main__':
     hunter = ZombieHunter()
     hunter.hunt_zombies('us')
+
+
